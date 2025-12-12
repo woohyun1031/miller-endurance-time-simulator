@@ -24,13 +24,13 @@ export const ObserverInfo: React.FC<ObserverInfoProps> = ({
       style={{ visibility: showText ? "visible" : "hidden" }}
     >
       <span>
-        현재 쿠퍼 위치 기준:{" "}
-        <Highlight ref={observerWhereRef}>인듀어런스 쪽에 가까움</Highlight>
+        관찰자 위치:{" "}
+        <Highlight ref={observerWhereRef}>Endurance 인접</Highlight>
       </span>
       <span>
-        밀러 시간: <WorldSpeed ref={millerSpeedInfoRef} />
+        Miller: <WorldSpeed ref={millerSpeedInfoRef} />
         {" · "}
-        인듀어런스 시간: <WorldSpeed ref={enduranceSpeedInfoRef} />
+        Endurance: <WorldSpeed ref={enduranceSpeedInfoRef} />
       </span>
     </ObserverInfoContainer>
   );

@@ -27,26 +27,33 @@ export const WorldHeader = styled.div`
 `;
 
 export const WorldName = styled.div`
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-size: ${({ theme }) => theme.fontSize.base};
 `;
 
 export const WorldTag = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  padding: 2px 6px;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  padding: 2px 8px;
   border-radius: ${({ theme }) => theme.borderRadius.full};
-  background: rgba(255, 255, 255, 0.06);
-  color: ${({ theme }) => theme.colors.textAccent};
+  background: rgba(255, 255, 255, 0.05);
+  color: ${({ theme }) => theme.colors.textMuted};
+  letter-spacing: 0.02em;
 `;
 
 export const TimeLabel = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.accentBlue};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
   text-align: right;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
 `;
 
 export const TimeValue = styled.span`
-  font-weight: 600;
+  font-weight: 500;
+  font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.textPrimary};
+  letter-spacing: 0.03em;
 `;
 
 export const TimeTimer = styled.div`

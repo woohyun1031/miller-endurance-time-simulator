@@ -58,6 +58,7 @@ export const MenuSection = styled.div`
   flex-direction: column;
   gap: 6px;
   margin-bottom: 10px;
+  letter-spacing: 0.02em;
 
   &:last-child {
     margin-bottom: 0;
@@ -73,7 +74,8 @@ export const RatioControl = styled.div`
 `;
 
 export const RatioLabel = styled.div`
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 400;
 `;
 
 export const RatioText = styled.span`
@@ -101,12 +103,15 @@ export const RatioEnd = styled.span`
 export const MenuCheckbox = styled.label`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: ${({ theme }) => theme.fontSize.sm};
-  color: #dde1ff;
+  color: ${({ theme }) => theme.colors.textAccent};
+  letter-spacing: 0.02em;
+  cursor: pointer;
 
   input[type="checkbox"] {
     width: 14px;
     height: 14px;
+    cursor: pointer;
   }
 `;

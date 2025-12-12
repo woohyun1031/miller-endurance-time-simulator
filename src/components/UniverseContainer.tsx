@@ -106,7 +106,7 @@ export const UniverseContainerComponent: React.FC = () => {
     let universeRect = universe.getBoundingClientRect();
 
     let dragging = false;
-    let observerNorm = 1; // 0 = 밀러, 1 = 인듀어런스
+    let observerNorm = 1; // 0 = Miller, 1 = Endurance
 
     let millerTime = 0;
     let enduranceTime = 0;
@@ -177,19 +177,19 @@ export const UniverseContainerComponent: React.FC = () => {
       const R = ratioFactor;
 
       if (R <= 1.01) {
-        ratioTextEl.textContent = "1시간 (동일)";
+        ratioTextEl.textContent = "1h (동일)";
       } else if (R < 24) {
-        ratioTextEl.textContent = `약 ${R.toFixed(1)}시간`;
+        ratioTextEl.textContent = `약 ${R.toFixed(1)}h`;
       } else if (R < 24 * 365) {
         const days = R / 24;
         if (Math.abs(days - 1) < 0.01) {
-          ratioTextEl.textContent = "1일";
+          ratioTextEl.textContent = "1d";
         } else {
-          ratioTextEl.textContent = `약 ${days.toFixed(1)}일`;
+          ratioTextEl.textContent = `약 ${days.toFixed(1)}d`;
         }
       } else {
         const years = R / (24 * 365);
-        ratioTextEl.textContent = `약 ${years.toFixed(1)}년`;
+        ratioTextEl.textContent = `약 ${years.toFixed(1)}yr`;
       }
     };
 
@@ -203,18 +203,18 @@ export const UniverseContainerComponent: React.FC = () => {
     const updateUI = () => {
       const { miller, endurance } = getTimeScales(observerNorm);
 
-      millerSpeedText.textContent = `${miller.toFixed(2)}x`;
-      enduranceSpeedText.textContent = `${endurance.toFixed(2)}x`;
+      millerSpeedText.textContent = `${miller.toFixed(2)}×`;
+      enduranceSpeedText.textContent = `${endurance.toFixed(2)}×`;
 
-      millerSpeedInfo.textContent = `${miller.toFixed(2)}x`;
-      enduranceSpeedInfo.textContent = `${endurance.toFixed(2)}x`;
+      millerSpeedInfo.textContent = `${miller.toFixed(2)}×`;
+      enduranceSpeedInfo.textContent = `${endurance.toFixed(2)}×`;
 
       if (observerNorm < 0.35) {
-        observerWhere.textContent = "밀러 행성 쪽에 거의 붙어 있음";
+        observerWhere.textContent = "Miller 인접";
       } else if (observerNorm > 0.65) {
-        observerWhere.textContent = "인듀어런스 쪽에 거의 붙어 있음";
+        observerWhere.textContent = "Endurance 인접";
       } else {
-        observerWhere.textContent = "두 세계의 중간 지점";
+        observerWhere.textContent = "중간 지점";
       }
     };
 

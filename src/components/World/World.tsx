@@ -25,12 +25,12 @@ interface WorldProps {
 
 const worldConfig = {
   miller: {
-    name: "밀러 행성",
-    tag: "블랙홀 근처 · 강한 중력장",
+    name: "Miller",
+    tag: "강한 중력장 · 시간 지연 발생",
   },
   endurance: {
-    name: "인듀어런스 호",
-    tag: "멀리 떨어진 관측자",
+    name: "Endurance",
+    tag: "약한 중력장 · 관측 기준점",
   },
 };
 
@@ -52,9 +52,9 @@ export const World: React.FC<WorldProps> = ({
           <WorldTag>{config.tag}</WorldTag>
         </div>
         <TimeLabel>
-          쿠퍼가 느끼는 속도 대비
+          상대 시간 배율
           <br />
-          <TimeValue ref={speedTextRef}>1.0x</TimeValue>
+          <TimeValue ref={speedTextRef}>1.0×</TimeValue>
           <TimeTimer>
             t = <span ref={timerRef}>0s</span>
           </TimeTimer>

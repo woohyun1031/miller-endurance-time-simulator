@@ -33,13 +33,13 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
       <MenuSection>
         <RatioControl>
           <RatioLabel>
-            밀러에서 <strong>1시간</strong>이 지날 때
+            Miller 기준 <strong>1시간</strong> 경과 시
             <br />
-            인듀어런스에서 흐르는 시간 비율:{" "}
+            Endurance 경과 시간:{" "}
             <RatioText ref={ratioTextRef}>약 7.0년</RatioText>
           </RatioLabel>
           <RatioSliderWrapper>
-            <RatioEnd>1시간 : 1시간</RatioEnd>
+            <RatioEnd>1h : 1h</RatioEnd>
             <input
               type="range"
               min={0}
@@ -47,7 +47,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
               defaultValue={100}
               ref={ratioSliderRef}
             />
-            <RatioEnd>1시간 : 7년</RatioEnd>
+            <RatioEnd>1h : 7yr</RatioEnd>
           </RatioSliderWrapper>
         </RatioControl>
       </MenuSection>
@@ -59,7 +59,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
             checked={showText}
             onChange={(e) => onToggleShowText(e.target.checked)}
           />
-          텍스트 / UI 표시
+          UI 표시
         </MenuCheckbox>
       </MenuSection>
     </MenuPanelContainer>
