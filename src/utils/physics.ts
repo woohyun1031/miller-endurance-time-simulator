@@ -329,17 +329,37 @@ export function sanitizePhysicsConfig(config: PhysicsConfig): PhysicsConfig {
   // 최소 거리는 rs 바로 바깥 (rs * 1.00001)
   const minDistanceKm = Math.max(PHYSICS_LIMITS.distanceKm.min, rsKm * 1.00001);
 
+  // Miller와 Endurance 거리 가져오기
+  let millerDistanceKm = Math.min(
+    PHYSICS_LIMITS.distanceKm.max,
+    Math.max(
+      minDistanceKm,
+      config.miller?.distanceKm || DEFAULT_PHYSICS_CONFIG.miller.distanceKm
+    )
+  );
+
+  let enduranceDistanceKm = Math.min(
+    PHYSICS_LIMITS.distanceKm.max,
+    Math.max(
+      minDistanceKm,
+      config.endurance?.distanceKm ||
+        DEFAULT_PHYSICS_CONFIG.endurance.distanceKm
+    )
+  );
+
+  // Miller는 항상 Endurance보다 블랙홀에 가까워야 함 (시간이 더 느리게)
+  // Miller > Endurance면 두 값을 교환
+  if (millerDistanceKm > enduranceDistanceKm) {
+    [millerDistanceKm, enduranceDistanceKm] = [
+      enduranceDistanceKm,
+      millerDistanceKm,
+    ];
+  }
+
   return {
     blackHoleMass,
     miller: {
-      // distanceKm는 rs보다 크고,최대값 이하
-      distanceKm: Math.min(
-        PHYSICS_LIMITS.distanceKm.max,
-        Math.max(
-          minDistanceKm,
-          config.miller?.distanceKm || DEFAULT_PHYSICS_CONFIG.miller.distanceKm
-        )
-      ),
+      distanceKm: millerDistanceKm,
       // velocityRatio는 제한 범위 내
       velocityRatio: Math.min(
         PHYSICS_LIMITS.velocityRatio.max,
@@ -351,14 +371,7 @@ export function sanitizePhysicsConfig(config: PhysicsConfig): PhysicsConfig {
       ),
     },
     endurance: {
-      distanceKm: Math.min(
-        PHYSICS_LIMITS.distanceKm.max,
-        Math.max(
-          minDistanceKm,
-          config.endurance?.distanceKm ||
-            DEFAULT_PHYSICS_CONFIG.endurance.distanceKm
-        )
-      ),
+      distanceKm: enduranceDistanceKm,
       velocityRatio: Math.min(
         PHYSICS_LIMITS.velocityRatio.max,
         Math.max(

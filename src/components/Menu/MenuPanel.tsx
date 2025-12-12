@@ -26,6 +26,7 @@ import {
   formatTimeRatio,
   DEFAULT_PHYSICS_CONFIG,
   PHYSICS_LIMITS,
+  sanitizePhysicsConfig,
 } from "../../utils/physics";
 
 export type SimulationMode = "classic" | "physics";
@@ -56,6 +57,11 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
   physicsConfig,
   onPhysicsConfigChange,
 }) => {
+  // 실제 계산에 사용되는 sanitized config (UI 표시용)
+  const sanitizedConfig = useMemo(() => {
+    return sanitizePhysicsConfig(physicsConfig);
+  }, [physicsConfig]);
+
   // Physics mode에서 계산된 시간 비율
   const physicsTimeRatio = useMemo(() => {
     if (simulationMode !== "physics") return null;
@@ -66,13 +72,45 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
     const newConfig = { ...physicsConfig };
 
     if (path === "blackHoleMass") {
-      newConfig.blackHoleMass = value;
+      // 블랙홀 질량 클램핑
+      newConfig.blackHoleMass = Math.min(
+        PHYSICS_LIMITS.blackHoleMass.max,
+        Math.max(PHYSICS_LIMITS.blackHoleMass.min, value)
+      );
     } else if (path.startsWith("miller.")) {
       const key = path.split(".")[1] as keyof typeof newConfig.miller;
-      newConfig.miller = { ...newConfig.miller, [key]: value };
+      let clampedValue = value;
+
+      if (key === "distanceKm") {
+        clampedValue = Math.min(
+          PHYSICS_LIMITS.distanceKm.max,
+          Math.max(PHYSICS_LIMITS.distanceKm.min, value)
+        );
+      } else if (key === "velocityRatio") {
+        clampedValue = Math.min(
+          PHYSICS_LIMITS.velocityRatio.max,
+          Math.max(PHYSICS_LIMITS.velocityRatio.min, value)
+        );
+      }
+
+      newConfig.miller = { ...newConfig.miller, [key]: clampedValue };
     } else if (path.startsWith("endurance.")) {
       const key = path.split(".")[1] as keyof typeof newConfig.endurance;
-      newConfig.endurance = { ...newConfig.endurance, [key]: value };
+      let clampedValue = value;
+
+      if (key === "distanceKm") {
+        clampedValue = Math.min(
+          PHYSICS_LIMITS.distanceKm.max,
+          Math.max(PHYSICS_LIMITS.distanceKm.min, value)
+        );
+      } else if (key === "velocityRatio") {
+        clampedValue = Math.min(
+          PHYSICS_LIMITS.velocityRatio.max,
+          Math.max(PHYSICS_LIMITS.velocityRatio.min, value)
+        );
+      }
+
+      newConfig.endurance = { ...newConfig.endurance, [key]: clampedValue };
     }
 
     onPhysicsConfigChange(newConfig);
@@ -135,7 +173,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
                 <PhysicsParamLabel>질량 (M☉ 배수)</PhysicsParamLabel>
                 <PhysicsParamInput
                   type="number"
-                  value={physicsConfig.blackHoleMass}
+                  value={sanitizedConfig.blackHoleMass}
                   onChange={(e) =>
                     handlePhysicsParamChange(
                       "blackHoleMass",
@@ -158,7 +196,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
                 <PhysicsParamLabel>궤도 거리 (km)</PhysicsParamLabel>
                 <PhysicsParamInput
                   type="number"
-                  value={physicsConfig.miller.distanceKm}
+                  value={sanitizedConfig.miller.distanceKm}
                   onChange={(e) =>
                     handlePhysicsParamChange(
                       "miller.distanceKm",
@@ -175,7 +213,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
                 <PhysicsParamLabel>공전 속도 (c×)</PhysicsParamLabel>
                 <PhysicsParamInput
                   type="number"
-                  value={physicsConfig.miller.velocityRatio}
+                  value={sanitizedConfig.miller.velocityRatio}
                   onChange={(e) =>
                     handlePhysicsParamChange(
                       "miller.velocityRatio",
@@ -198,7 +236,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
                 <PhysicsParamLabel>궤도 거리 (km)</PhysicsParamLabel>
                 <PhysicsParamInput
                   type="number"
-                  value={physicsConfig.endurance.distanceKm}
+                  value={sanitizedConfig.endurance.distanceKm}
                   onChange={(e) =>
                     handlePhysicsParamChange(
                       "endurance.distanceKm",
@@ -215,7 +253,7 @@ export const MenuPanel: React.FC<MenuPanelProps> = ({
                 <PhysicsParamLabel>공전 속도 (c×)</PhysicsParamLabel>
                 <PhysicsParamInput
                   type="number"
-                  value={physicsConfig.endurance.velocityRatio}
+                  value={sanitizedConfig.endurance.velocityRatio}
                   onChange={(e) =>
                     handlePhysicsParamChange(
                       "endurance.velocityRatio",
