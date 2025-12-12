@@ -115,3 +115,106 @@ export const MenuCheckbox = styled.label`
     cursor: pointer;
   }
 `;
+
+// ========== Physics Mode 스타일 ==========
+
+export const ModeSelector = styled.div`
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+`;
+
+export const ModeButton = styled.button<{ $active: boolean }>`
+  flex: 1;
+  padding: 6px 8px;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid
+    ${({ theme, $active }) =>
+      $active ? theme.colors.accentBlue : theme.colors.borderLight};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  background: ${({ theme, $active }) =>
+    $active ? "rgba(169, 176, 255, 0.15)" : "transparent"};
+  color: ${({ theme, $active }) =>
+    $active ? theme.colors.textPrimary : theme.colors.textMuted};
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accentBlue};
+    background: rgba(169, 176, 255, 0.1);
+  }
+`;
+
+export const PhysicsSectionTitle = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
+`;
+
+export const PhysicsParamGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+`;
+
+export const PhysicsParamItem = styled.div<{ $fullWidth?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  grid-column: ${({ $fullWidth }) => ($fullWidth ? "span 2" : "auto")};
+`;
+
+export const PhysicsParamLabel = styled.label`
+  font-size: ${({ theme }) => theme.fontSize.xxs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  letter-spacing: 0.02em;
+`;
+
+export const PhysicsParamInput = styled.input`
+  width: 100%;
+  padding: 4px 6px;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid ${({ theme }) => theme.colors.borderLight};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  outline: none;
+  transition: border-color ${({ theme }) => theme.transitions.fast};
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.accentBlue};
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+`;
+
+export const PhysicsResult = styled.div`
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255, 210, 123, 0.08);
+  border: 1px solid rgba(255, 210, 123, 0.2);
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textAccent};
+  line-height: 1.5;
+`;
+
+export const PhysicsResultValue = styled.span`
+  color: ${({ theme }) => theme.colors.textTime};
+  font-weight: 600;
+`;
+
+export const MenuDivider = styled.div`
+  height: 1px;
+  background: ${({ theme }) => theme.colors.borderLight};
+  margin: 8px 0;
+`;

@@ -1,5 +1,5 @@
 // src/components/UniverseContainer.tsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 import { GlobalStyle } from "./styles/GlobalStyle";
@@ -12,8 +12,14 @@ import { StarField, type Star } from "./StarField";
 import { World } from "./World";
 import { Observer } from "./Observer";
 import { MenuButton, MenuPanel } from "./Menu";
+import { type SimulationMode } from "./Menu/MenuPanel";
 import { Header } from "./Header";
 import { ObserverInfo } from "./ObserverInfo";
+import {
+  type PhysicsConfig,
+  DEFAULT_PHYSICS_CONFIG,
+  getPhysicsTimeScales,
+} from "../utils/physics";
 
 const STAR_COUNT = 140;
 
@@ -62,8 +68,43 @@ export const UniverseContainerComponent: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showText, setShowText] = useState(true);
 
+  // ====== Physics mode state ======
+  const [simulationMode, setSimulationMode] =
+    useState<SimulationMode>("classic");
+  const [physicsConfig, setPhysicsConfig] = useState<PhysicsConfig>(
+    DEFAULT_PHYSICS_CONFIG
+  );
+
   // Use pre-generated stars
   const stars = INITIAL_STARS;
+
+  // Physics 모드용 시간 스케일 계산 함수
+  const getPhysicsScales = useCallback(
+    (observerNorm: number) => {
+      return getPhysicsTimeScales(observerNorm, physicsConfig);
+    },
+    [physicsConfig]
+  );
+
+  // useEffect 내에서 최신 값을 참조하기 위한 refs
+  const simulationModeRef = useRef(simulationMode);
+  const getPhysicsScalesRef = useRef(getPhysicsScales);
+  const updateUIRef = useRef<(() => void) | null>(null);
+
+  // refs를 최신 값으로 업데이트
+  useEffect(() => {
+    simulationModeRef.current = simulationMode;
+    // 모드 변경 시 UI 즉시 업데이트
+    updateUIRef.current?.();
+  }, [simulationMode]);
+
+  useEffect(() => {
+    getPhysicsScalesRef.current = getPhysicsScales;
+    // 물리 파라미터 변경 시 Physics 모드에서 UI 업데이트
+    if (simulationModeRef.current === "physics") {
+      updateUIRef.current?.();
+    }
+  }, [getPhysicsScales]);
 
   // ====== 시뮬레이션 로직 ======
   useEffect(() => {
@@ -118,6 +159,7 @@ export const UniverseContainerComponent: React.FC = () => {
     const R_MID = 24;
     const R_MAX = 7 * 365 * 24;
     let ratioFactor = R_MAX; // 기본: 7년
+    let hasShownNaNAlert = false; // NaN 알림 중복 방지 플래그
 
     const isVertical = () => window.innerWidth <= 720;
 
@@ -194,6 +236,12 @@ export const UniverseContainerComponent: React.FC = () => {
     };
 
     const getTimeScales = (normX: number) => {
+      // Physics 모드: 상대성이론 기반 계산
+      if (simulationModeRef.current === "physics") {
+        return getPhysicsScalesRef.current(normX);
+      }
+
+      // Classic 모드: 기존 슬라이더 기반 계산
       const R = ratioFactor <= 1 ? 1 : ratioFactor;
       const miller = Math.pow(R, -normX);
       const endurance = Math.pow(R, 1 - normX);
@@ -217,6 +265,9 @@ export const UniverseContainerComponent: React.FC = () => {
         observerWhere.textContent = "중간 지점";
       }
     };
+
+    // updateUI를 외부에서 호출할 수 있도록 ref에 저장
+    updateUIRef.current = updateUI;
 
     const formatDuration = (totalSeconds: number) => {
       let s = Math.floor(totalSeconds);
@@ -319,6 +370,34 @@ export const UniverseContainerComponent: React.FC = () => {
 
       const { miller, endurance } = getTimeScales(observerNorm);
 
+      // NaN 감지 및 방어
+      if (
+        isNaN(miller) ||
+        isNaN(endurance) ||
+        !isFinite(miller) ||
+        !isFinite(endurance)
+      ) {
+        console.error("NaN detected in time scales:", { miller, endurance });
+        // 한 번만 알림 표시 (중복 방지)
+        if (!hasShownNaNAlert) {
+          hasShownNaNAlert = true;
+          alert(
+            "시간 계산에 오류가 발생했습니다. 물리 파라미터가 유효하지 않습니다. 시뮬레이션을 초기화합니다."
+          );
+        }
+        // 시간 값 초기화
+        millerTime = 0;
+        enduranceTime = 0;
+        millerClock = 0;
+        enduranceClock = 0;
+        millerTimerEl.textContent = formatDuration(0);
+        enduranceTimerEl.textContent = formatDuration(0);
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
+      hasShownNaNAlert = false; // 정상 동작 시 플래그 리셋
+
       millerTime += dt * miller;
       enduranceTime += dt * endurance;
 
@@ -420,6 +499,10 @@ export const UniverseContainerComponent: React.FC = () => {
             isOpen={menuOpen}
             showText={showText}
             onToggleShowText={(checked) => setShowText(checked)}
+            simulationMode={simulationMode}
+            onSimulationModeChange={setSimulationMode}
+            physicsConfig={physicsConfig}
+            onPhysicsConfigChange={setPhysicsConfig}
           />
 
           <Header showText={showText} />
