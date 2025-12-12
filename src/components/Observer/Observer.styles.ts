@@ -27,7 +27,7 @@ export const ObserverContainer = styled.div<{ $isDragging?: boolean }>`
 `;
 
 export const ObserverLabel = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
   font-weight: 600;
   color: #00110c;
 `;

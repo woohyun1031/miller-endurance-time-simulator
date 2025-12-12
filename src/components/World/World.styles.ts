@@ -1,14 +1,18 @@
 // src/components/World/World.styles.ts
 import styled, { css } from "styled-components";
 
-export const WorldContainer = styled.div<{ $variant: "miller" | "endurance" }>`
+export const WorldContainer = styled.div<{
+  $variant: "miller" | "endurance";
+  showText: boolean;
+}>`
   flex: 1;
   position: relative;
   padding: ${({ theme }) => theme.spacing.md};
   min-height: 220px;
   overflow: visible;
   background: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.borderLight};
+  border: ${({ showText, theme }) =>
+    showText ? theme.colors.borderLight : "none"}  
   border-radius: ${({ theme }) => theme.borderRadius.md};
 `;
 

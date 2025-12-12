@@ -45,7 +45,7 @@ export const World: React.FC<WorldProps> = ({
   const config = worldConfig[variant];
 
   return (
-    <WorldContainer $variant={variant} ref={worldRef}>
+    <WorldContainer $variant={variant} ref={worldRef} showText={showText}>
       <WorldHeader style={{ visibility: showText ? "visible" : "hidden" }}>
         <div>
           <WorldName>{config.name}</WorldName>

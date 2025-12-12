@@ -9,7 +9,7 @@ interface ObserverProps {
 export const Observer: React.FC<ObserverProps> = ({ observerRef }) => {
   return (
     <ObserverContainer ref={observerRef} className="observer">
-      <ObserverLabel>쿠퍼</ObserverLabel>
+      <ObserverLabel>Cooper</ObserverLabel>
     </ObserverContainer>
   );
 };

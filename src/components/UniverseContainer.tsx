@@ -328,7 +328,7 @@ export const UniverseContainerComponent: React.FC = () => {
       millerTimerEl.textContent = formatDuration(millerClock);
       enduranceTimerEl.textContent = formatDuration(enduranceClock);
 
-      const period = 4;
+      const period = 10;
       const angleMiller = ((millerTime % period) / period) * Math.PI * 2;
       const angleEndurance = ((enduranceTime % period) / period) * Math.PI * 2;
       const R = 40;
@@ -424,7 +424,7 @@ export const UniverseContainerComponent: React.FC = () => {
 
           <Header showText={showText} />
 
-          <UniverseWrapper ref={universeRef}>
+          <UniverseWrapper ref={universeRef} showText={showText}>
             <World
               variant="miller"
               worldRef={millerWorldRef}

@@ -22,14 +22,15 @@ export const AppContainer = styled.div`
   z-index: 1;
 `;
 
-export const UniverseContainer = styled.div`
+export const UniverseContainer = styled.div<{ showText: boolean }>`
   position: relative;
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
   background: transparent;
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ theme }) => theme.spacing.lg};
-  box-shadow: ${({ theme }) => theme.shadows.card};
+  box-shadow: ${({ theme, showText }) =>
+    showText ? theme.shadows.card : "none"};
   overflow: hidden;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
