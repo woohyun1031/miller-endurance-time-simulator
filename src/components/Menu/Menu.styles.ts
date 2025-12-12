@@ -134,7 +134,7 @@ export const ModeButton = styled.button<{ $active: boolean }>`
     ${({ theme, $active }) =>
       $active ? theme.colors.accentBlue : theme.colors.borderLight};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
-  background: ${({ theme, $active }) =>
+  background: ${({ $active }) =>
     $active ? "rgba(169, 176, 255, 0.15)" : "transparent"};
   color: ${({ theme, $active }) =>
     $active ? theme.colors.textPrimary : theme.colors.textMuted};
