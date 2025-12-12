@@ -1,4 +1,5 @@
 # Miller-Endurance Time Simulator
+![2025-12-123 55 42-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/e31784bd-7183-45b5-8417-23c3595e8bc7)
 
 영화 **인터스텔라(Interstellar)**에서 등장하는 시간 지연 효과를 **실제 상대성이론 물리 공식**으로 시뮬레이션합니다.
 
